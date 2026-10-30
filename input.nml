@@ -1,0 +1,378 @@
+&probit_transform_nml
+   /
+&algorithm_info_nml
+   qceff_table_filename = ''
+   /
+&filter_nml
+   async                    =  2,
+   adv_ens_command          = "./advance_model.csh",
+    ens_size                 = 40,
+   obs_sequence_in_name     = "obs_seq.out",
+   obs_sequence_out_name    = "obs_seq.final",
+   input_state_file_list    = "input_list1.txt","input_list2.txt",
+   output_state_file_list   = "output_list1.txt","output_list2.txt",
+   init_time_days           = -1,
+   init_time_seconds        = -1,
+    first_obs_days           = 153628,
+    first_obs_seconds        = 41401,
+    last_obs_days            = 153628,
+    last_obs_seconds         = 44999,
+   num_output_state_members = 0,
+   num_output_obs_members   = 40,
+   output_interval          = 1,
+   num_groups               = 1,
+   distributed_state        = .true.
+   compute_posterior        = .true.
+   output_forward_op_errors = .true.,
+   output_timestamps        = .true.,
+   trace_execution          = .true.,
+
+   stages_to_write          = 'forecast', 'analysis'
+   output_members           = .true.
+   output_mean              = .true.
+   output_sd                = .true.
+   write_all_stages_at_end  = .true.
+
+      inf_flavor                  = 2,                   0,
+        inf_initial_from_restart    = .false.,            .false.,
+        inf_sd_initial_from_restart = .false.,            .false.,
+   inf_initial                 = 1.00,                   1.00,
+   inf_lower_bound             = 1.0,                    1.0,
+   inf_upper_bound             = 1000000.0,              1000000.0,
+   inf_damping                 = 0.90,                   1.00,
+   inf_sd_initial              = 0.6,                     0.0,
+   inf_sd_lower_bound          = 0.60,                   0.10
+   inf_sd_max_change           = 1.05,                    1.05,
+   silence                  = .true.,
+   /
+
+&quality_control_nml
+   input_qc_threshold          = 4.0,
+   outlier_threshold           = 10.0,
+   enable_special_outlier_code = .false.
+   /
+
+&fill_inflation_restart_nml
+   write_prior_inf = .true.
+   prior_inf_mean  = 1.00
+   prior_inf_sd    = 0.6
+
+   write_post_inf  = .false.
+   post_inf_mean   = 1.00
+   post_inf_sd     = 0.6
+
+   input_state_files = 'advance_temp1/wrfinput_d01','advance_temp2/wrfinput_d01','advance_temp3/wrfinput_d01','advance_temp4/wrfinput_d01','advance_temp5/wrfinput_d01','advance_temp6/wrfinput_d01','advance_temp7/wrfinput_d01','advance_temp8/wrfinput_d01','advance_temp9/wrfinput_d01','advance_temp10/wrfinput_d01','advance_temp11/wrfinput_d01','advance_temp12/wrfinput_d01','advance_temp13/wrfinput_d01','advance_temp14/wrfinput_d01','advance_temp15/wrfinput_d01','advance_temp16/wrfinput_d01','advance_temp17/wrfinput_d01','advance_temp18/wrfinput_d01','advance_temp19/wrfinput_d01','advance_temp20/wrfinput_d01','advance_temp21/wrfinput_d01','advance_temp22/wrfinput_d01','advance_temp23/wrfinput_d01','advance_temp24/wrfinput_d01','advance_temp25/wrfinput_d01','advance_temp26/wrfinput_d01','advance_temp27/wrfinput_d01','advance_temp28/wrfinput_d01','advance_temp29/wrfinput_d01','advance_temp30/wrfinput_d01','advance_temp31/wrfinput_d01','advance_temp32/wrfinput_d01','advance_temp33/wrfinput_d01','advance_temp34/wrfinput_d01','advance_temp35/wrfinput_d01','advance_temp36/wrfinput_d01','advance_temp37/wrfinput_d01','advance_temp38/wrfinput_d01','advance_temp39/wrfinput_d01','advance_temp40/wrfinput_d01','advance_temp1/wrfinput_d02','advance_temp2/wrfinput_d02','advance_temp3/wrfinput_d02','advance_temp4/wrfinput_d02','advance_temp5/wrfinput_d02','advance_temp6/wrfinput_d02','advance_temp7/wrfinput_d02','advance_temp8/wrfinput_d02','advance_temp9/wrfinput_d02','advance_temp10/wrfinput_d02','advance_temp11/wrfinput_d02','advance_temp12/wrfinput_d02','advance_temp13/wrfinput_d02','advance_temp14/wrfinput_d02','advance_temp15/wrfinput_d02','advance_temp16/wrfinput_d02','advance_temp17/wrfinput_d02','advance_temp18/wrfinput_d02','advance_temp19/wrfinput_d02','advance_temp20/wrfinput_d02','advance_temp21/wrfinput_d02','advance_temp22/wrfinput_d02','advance_temp23/wrfinput_d02','advance_temp24/wrfinput_d02','advance_temp25/wrfinput_d02','advance_temp26/wrfinput_d02','advance_temp27/wrfinput_d02','advance_temp28/wrfinput_d02','advance_temp29/wrfinput_d02','advance_temp30/wrfinput_d02','advance_temp31/wrfinput_d02','advance_temp32/wrfinput_d02','advance_temp33/wrfinput_d02','advance_temp34/wrfinput_d02','advance_temp35/wrfinput_d02','advance_temp36/wrfinput_d02','advance_temp37/wrfinput_d02','advance_temp38/wrfinput_d02','advance_temp39/wrfinput_d02','advance_temp40/wrfinput_d02',
+   single_file       = .false.
+   verbose           = .true.
+   /
+
+&ensemble_manager_nml
+   layout = 2,
+   tasks_per_node = 16
+   communication_configuration = 1,
+   debug = .true.
+   /
+
+&smoother_nml
+   num_lags              = 0
+   start_from_restart    = .false.
+   output_restart        = .false.
+   restart_in_file_name  = 'smoother_ics'
+   restart_out_file_name = 'smoother_restart' /
+
+&assim_tools_nml
+    cutoff                   = 0.07,
+   sort_obs_inc                    = .false.,
+   distribute_mean                 = .true,
+   spread_restoration              = .false.,
+   sampling_error_correction       = .false.,
+   adaptive_localization_threshold = -1,
+   output_localization_diagnostics = .false.,
+   localization_diagnostics_file   = 'localization_diagnostics',
+   convert_all_state_verticals_first = .true.
+   convert_all_obs_verticals_first   = .true.
+   print_every_nth_obs               = 0,
+   /
+
+&cov_cutoff_nml
+   select_localization             = 4,
+   /
+
+&closest_member_tool_nml
+   input_restart_file_list   = 'input_list1.txt',
+   output_file_name          = 'closest_results.txt'
+   ens_size                  = 3,
+   single_restart_file_in    = .false.,
+   difference_method         = 4,
+   use_only_qtys             = 'QTY_U_WIND_COMPONENT'
+   /
+
+
+&location_nml
+   horiz_dist_only             = .false.,
+   vert_normalization_pressure = 100000.0,
+   vert_normalization_height   = 100000.0,
+   vert_normalization_level    = 40,
+   vert_normalization_scale_height = 10.0,
+   approximate_distance        = .false.,
+   nlon                        = 141,
+   nlat                        = 72,
+   output_box_info             = .true.,
+   /
+
+&model_nml
+   default_state_variables     = .false.,
+   wrf_state_variables = 'U',     'QTY_U_WIND_COMPONENT',     'TYPE_U',    'UPDATE','999',
+                         'V',     'QTY_V_WIND_COMPONENT',     'TYPE_V',    'UPDATE','999',
+                         'W',     'QTY_VERTICAL_VELOCITY',    'TYPE_W',    'UPDATE','999',
+                         'PH',    'QTY_GEOPOTENTIAL_HEIGHT',  'TYPE_GZ',   'UPDATE','999',
+                         'THM',   'QTY_POTENTIAL_TEMPERATURE','TYPE_T',    'UPDATE','999',
+                         'MU',    'QTY_PRESSURE',             'TYPE_MU',   'UPDATE','999',
+                         'QVAPOR','QTY_VAPOR_MIXING_RATIO',   'TYPE_QV',   'UPDATE','999',
+                         'PSFC',  'QTY_SURFACE_PRESSURE',     'TYPE_PSFC', 'UPDATE','999',
+                         'Q2', 'QTY_VAPOR_MIXING_RATIO', 'TYPE_Q2', 'UPDATE', '999',
+                         'QRAIN', 'QTY_RAINWATER_MIXING_RATIO', 'TYPE_QRAIN', 'UPDATE', '999',
+                         'QGRAUP', 'QTY_GRAUPEL_MIXING_RATIO', 'TYPE_QGRAUPEL', 'UPDATE', '999',
+                         'QSNOW', 'QTY_SNOW_MIXING_RATIO', 'TYPE_QSNOW', 'UPDATE', '999',
+                         'QICE', 'QTY_CLOUD_ICE', 'TYPE_QICE', 'UPDATE', '999',
+                         'QCLOUD', 'QTY_CLOUD_LIQUID_WATER', 'TYPE_QCLOUD', 'UPDATE', '999',
+                         'T2', 'QTY_TEMPERATURE', 'TYPE_T2', 'UPDATE', '999',
+                         'U10', 'QTY_U_WIND_COMPONENT', 'TYPE_U10', 'UPDATE', '999',
+                         'V10', 'QTY_V_WIND_COMPONENT', 'TYPE_V10', 'UPDATE', '999', 
+                         'TH2', 'QTY_POTENTIAL_TEMPERATURE', 'TYPE_TH2', 'UPDATE', '999',
+                         'QNRAIN', 'QTY_RAIN_NUMBER_CONCENTR', 'TYPE_QNRAIN', 'UPDATE', '999',
+
+
+   wrf_state_bounds    = 'QVAPOR','0.0','NULL','CLAMP',
+                         'QRAIN', '0.0','NULL','CLAMP',
+                         'QCLOUD','0.0','NULL','CLAMP',
+                         'Q2','0.0','NULL','CLAMP',
+                         'QGRAUPEL','0.0','NULL','CLAMP',
+                         'QSNOW','0.0','NULL','CLAMP',
+                         'QICE','0.0','NULL','CLAMP',
+                         'QNRAIN','0.0','NULL','CLAMP',
+
+    num_domains              = 2,
+   calendar_type               = 3,
+    assimilation_period_seconds = 3600,
+    vert_localization_coord     = 3,
+   center_search_half_length   = 500000.,
+   center_spline_grid_scale    = 10,
+   sfc_elev_max_diff           = -1.0,
+   circulation_pres_level      = 80000.0,
+   circulation_radius          = 108000.0,
+   allow_obs_below_vol         = .false.,
+   /
+
+&utilities_nml
+   TERMLEVEL = 1,
+   module_details = .false.,
+   logfilename = 'dart_log.out',
+   nmlfilename = 'dart_log.nml',
+   write_nml   = 'file',
+   /
+
+&reg_factor_nml
+   select_regression           = 1,
+   input_reg_file              = "time_mean_reg",
+   save_reg_diagnostics        = .false.,
+   reg_diagnostics_file        = 'reg_diagnostics',
+   /
+
+&obs_sequence_nml
+   write_binary_obs_sequence   = .false.  /
+
+&preprocess_nml
+   overwrite_output        = .true.
+   input_obs_qty_mod_file  = '../../../assimilation_code/modules/observations/DEFAULT_obs_kind_mod.F90'
+   output_obs_qty_mod_file = '../../../assimilation_code/modules/observations/obs_kind_mod.f90'
+   input_obs_def_mod_file  = '../../../observations/forward_operators/DEFAULT_obs_def_mod.F90'
+   output_obs_def_mod_file = '../../../observations/forward_operators/obs_def_mod.f90'
+   quantity_files          = '../../../assimilation_code/modules/observations/atmosphere_quantities_mod.f90'
+   obs_type_files          = '../../../observations/forward_operators/obs_def_reanalysis_bufr_mod.f90',
+                             '../../../observations/forward_operators/obs_def_radar_mod.f90',
+                             '../../../observations/forward_operators/obs_def_metar_mod.f90',
+                             '../../../observations/forward_operators/obs_def_dew_point_mod.f90',
+                             '../../../observations/forward_operators/obs_def_rel_humidity_mod.f90',
+                             '../../../observations/forward_operators/obs_def_altimeter_mod.f90',
+                             '../../../observations/forward_operators/obs_def_gps_mod.f90',
+                             '../../../observations/forward_operators/obs_def_vortex_mod.f90',
+                             '../../../observations/forward_operators/obs_def_gts_mod.f90',
+                             '../../../observations/forward_operators/obs_def_tpw_mod.f90',
+                             '../../../observations/forward_operators/obs_def_pblh_mod.f90'
+   /
+
+&obs_kind_nml
+   assimilate_these_obs_types   = 'GPS_TOTAL_PRECIPITABLE_WATER',
+   evaluate_these_obs_types     = 'null',
+   /
+
+#   assimilate_these_obs_types   = 'null',
+#   assimilate_these_obs_types   = 'GPS_TOTAL_PRECIPITABLE_WATER',
+#   assimilate_these_obs_types   = 'RADIOSONDE_TEMPERATURE',
+#                                  'RADIOSONDE_U_WIND_COMPONENT',
+#                                  'RADIOSONDE_V_WIND_COMPONENT',
+#                                  'SAT_U_WIND_COMPONENT',
+#                                  'SAT_V_WIND_COMPONENT',
+#                                  'ACARS_U_WIND_COMPONENT',
+#                                  'ACARS_V_WIND_COMPONENT',
+#                                  'ACARS_TEMPERATURE',
+
+&obs_diag_nml
+   obs_sequence_name          = 'obs_seq.final',
+   first_bin_center           =  2013, 7, 8, 12, 0, 0 ,
+   last_bin_center            =  2013 , 7 , 9 , 12 , 0, 0 ,
+   bin_separation             =     0, 0, 0, 6, 0, 0 ,
+   bin_width                  =     0, 0, 0, 6, 0, 0 ,
+   time_to_skip               =     0, 0, 0, 0, 0, 0 ,
+   max_num_bins               = 1000,
+   rat_cri                    = 5000.0,
+   input_qc_threshold         = 4.0,
+   Nregions                   = 1,
+   lonlim1                    =  235.0,
+   lonlim2                    =  295.0,
+   latlim1                    =   25.0,
+   latlim2                    =   55.0,
+   reg_names                  = 'North America',
+   print_mismatched_locs      = .false.,
+   print_obs_locations        = .false.,
+   verbose                    = .false.,
+   /
+
+&wrf_dart_to_fields_nml
+   include_slp             = .true.,
+   include_wind_components = .true.,
+   include_height_on_pres  = .true.,
+   include_temperature     = .true.,
+   include_rel_humidity    = .true.,
+   include_surface_fields  = .false.,
+   include_sat_ir_temp     = .false.,
+   pres_levels             = 70000.,
+   /
+
+&schedule_nml
+   calendar        = 'Gregorian',
+   first_bin_start =  2013, 7, 8, 9, 0, 0 ,
+   first_bin_end   =  2013, 7, 8, 15, 0, 0 ,
+   last_bin_end    =  2013, 7, 9, 12, 0, 0 ,
+   bin_interval_days    = 0,
+   bin_interval_seconds = 21600,
+   max_num_bins         = 1000,
+   print_table          = .true.,
+   /
+
+&obs_seq_to_netcdf_nml
+   obs_sequence_name = 'obs_seq.final',
+   obs_sequence_list = '',
+   append_to_netcdf  = .false.,
+   lonlim1    =    0.0,
+   lonlim2    =  360.0,
+   latlim1    =  -90.0,
+   latlim2    =   90.0,
+   verbose    = .false.,
+   /
+
+# There is one GIGANTIC difference between the obsdef_mask.txt and .nc
+# The netCDF file intentionally ignores the effect of nTmin/nTmax.
+# The netCDF file has ALL matching stations, regardless of temporal coverage.
+
+&obs_seq_coverage_nml
+   obs_sequence_list = 'obs_coverage_list.txt',
+   obs_sequence_name = '',
+   obs_of_interest   = 'METAR_U_10_METER_WIND',
+   textfile_out      = 'METAR_U_10_METER_WIND_obsdef_mask.txt',
+   netcdf_out        = 'METAR_U_10_METER_WIND_obsdef_mask.nc',
+   lonlim1    =    0.0,
+   lonlim2    =  360.0,
+   latlim1    =  -90.0,
+   latlim2    =   90.0,
+   nTmin      =      8,
+   nTmax      =      8,
+   verbose    = .false.,
+   /
+
+# selections_file is a list of obs_defs output
+# from the obs_seq_coverage utility.
+
+&obs_selection_nml
+   filename_seq          = 'obs_seq.out',
+   filename_seq_list     = '',
+   filename_out          = 'obs_seq.processed',
+   selections_file       = 'obsdef_mask.txt',
+   selections_is_obs_seq = .false.,
+   print_only            = .false.,
+   calendar              = 'gregorian',
+ /
+
+&obs_seq_verify_nml
+   obs_sequences     = ''
+   obs_sequence_list = 'obs_verify_list.txt'
+   input_template    = 'obsdef_mask.nc'
+   netcdf_out        = 'forecast.nc'
+   obtype_string     = 'METAR_U_10_METER_WIND'
+   print_every       = 10000
+   verbose           = .true.
+   debug             = .false.
+   /
+
+&obs_sequence_tool_nml
+   num_input_files   = 1,
+   filename_seq      = 'obs_seq.out',
+   filename_out      = 'obs_seq.processed',
+    first_obs_days           = 153628,
+    first_obs_seconds        = 41401,
+    last_obs_days            = 153628,
+    last_obs_seconds         = 44999,
+   obs_types         = '',
+   keep_types        = .false.,
+   print_only        = .false.,
+   min_lat           = -90.0,
+   max_lat           =  90.0,
+   min_lon           =   0.0,
+   max_lon           = 360.0,
+   /
+
+&replace_wrf_fields_nml
+   debug = .true.,
+   fail_on_missing_field = .false.,
+   fieldnames = "SNOWC",
+                "ALBBCK",
+                "TMN",
+                "TSK",
+                "SH2O",
+                "SMOIS",
+                "SEAICE",
+                "HGT_d01",
+                "TSLB",
+                "SST",
+                "SNOWH",
+                "SNOW",
+   fieldlist_file = '',
+   /
+
+&obs_common_subset_nml
+   num_to_compare_at_once = 2,
+   filename_seq           = 'obs_seq1.final', 'obs_seq2.final',
+   filename_seq_list      = '',
+   filename_out_suffix    = '.common' ,
+   calendar               = 'Gregorian',
+   print_every            = 1000,
+   dart_qc_threshold      = 3,
+   print_only             = .false.,
+   /
+
+&state_vector_io_nml
+   single_precision_output    = .true.,
+   /
+
+&io_filenames_nml
+   restart_in_stub = '/st8/arellano/AZWRFF/DART_rundir_test/advance_temp',
+   restart_out_stub = 'filter_restart',
+   overwrite_input = .true.
+/
+
+&obs_def_tpw_nml
+   model_levels = .true.,
+   separate_surface_level = .true.,
+   pressure_top = 10000
+/
